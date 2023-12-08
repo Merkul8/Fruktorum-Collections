@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container py-5">
+    {% if request.user.is_authenticated %}
+    <a class="btn btn-primary my-2" href="{% url 'bookmark_delete' pk=bookmark.pk %}" role="button">Удалить закладку</a>
+    {% endif %}
+    <div class="row">
+        <ul>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <h3>{{ bookmark.title }}</h3>
+                </div>
+            </li>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <h3>{{ bookmark.description }}</h3>
+                </div>
+            </li>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <h3><a href="{{ bookmark.url }}">{{ bookmark.url }}</a></h3>
+                </div>
+            </li>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <h3>{{ bookmark.og_type }}</h3>
+                </div>
+            </li>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <img src="{{ bookmark.og_image }}" alt="Картинка новости" width="500" height="300">
+                </div>
+            </li>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <h3>{{ bookmark.date_modified }}</h3>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+                  
+                
+{% endblock %}

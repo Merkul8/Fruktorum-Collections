@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container py-5">
+    {% if request.user.is_authenticated %}
+    <a class="btn btn-primary my-2" href="{% url 'collection_delete' pk=collection.pk %}" role="button">Удалить коллекцию</a>
+    <a class="btn btn-primary my-2" href="{% url 'update_collection' pk=collection.pk %}" role="button">Изменить коллекцию</a>
+    {% endif %}
+    <div class="row">
+        <ul>
+            <li class="col-12 px-2 py-2">
+                <div>
+                    <h3>{{ collection.title }}</h3>
+                    <h3>{{ collection.description }}</h3>
+                    <h3>{{ collection.date_created }}</h3>
+                    <h3>{{ collection.date_modified }}</h3>
+                    <h3>{{ collection.bookmarks }}</h3>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

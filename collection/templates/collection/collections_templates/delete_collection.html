@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <form method="POST">
+                {% csrf_token %}
+                <p>Вы уверены что хотите удалить коллекцию?</p>
+                <input type="submit" value="Delete">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
