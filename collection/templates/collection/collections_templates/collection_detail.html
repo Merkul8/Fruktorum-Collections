@@ -2,20 +2,31 @@
 {% block main %}
 <div class="container py-5">
     {% if request.user.is_authenticated %}
-    <a class="btn btn-primary my-2" href="{% url 'collection_delete' pk=collection.pk %}" role="button">Удалить коллекцию</a>
-    <a class="btn btn-primary my-2" href="{% url 'update_collection' pk=collection.pk %}" role="button">Изменить коллекцию</a>
-    <a class="btn btn-primary my-2" href="{% url 'add_bookmark_to_collection' pk=collection.pk %}" role="button">Добавить закладку</a>
-    <a class="btn btn-primary my-2" href="{% url 'add_new_bookmark_to_collection' pk=collection.pk %}" role="button">Добавить новую закладку</a>
+    <a class="btn btn-primary my-2" href="{% url 'collection_delete' pk=collection.pk %}" role="button">Удалить
+        коллекцию</a>
+    <a class="btn btn-primary my-2" href="{% url 'update_collection' pk=collection.pk %}" role="button">Изменить
+        коллекцию</a>
+    <a class="btn btn-primary my-2" href="{% url 'add_bookmark_to_collection' pk=collection.pk %}"
+        role="button">Добавить закладку</a>
+    <a class="btn btn-primary my-2" href="{% url 'add_new_bookmark_to_collection' pk=collection.pk %}"
+        role="button">Добавить новую закладку</a>
     {% endif %}
     <div class="row">
         <ul>
             <li class="col-12 px-2 py-2">
                 <div>
-                    <h3>{{ collection.title }}</h3>
-                    <h3>{{ collection.description }}</h3>
-                    <h3>{{ collection.date_created }}</h3>
-                    <h3>{{ collection.date_modified }}</h3>
-                    <h3>{{ collection.bookmarks }}</h3>
+                    <h3>Название: {{ collection.title }}</h3>
+                    <h3>Краткое описание: {{ collection.description }}</h3>
+                    <h3>Дата создания: {{ collection.date_created }}</h3>
+                    <h3>Дата последнего изменения: {{ collection.date_modified }}</h3>
+                    <h3>Bookmarks in Collection:</h3>
+                    <ul>
+                        {% for bookmark in collection.bookmarks.all %}
+                        <a href="{{ bookmark.get_absolute_url }}"><li>{{ bookmark.title }}</li></a>
+                        {% empty %}
+                        <li>No bookmarks in this collection.</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </li>
         </ul>

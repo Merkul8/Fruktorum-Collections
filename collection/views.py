@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.views.generic import DetailView
 from .services import get_some_parameters
-from drf_spectacular.utils import extend_schema
+from collection.tasks import send_test_message
 
 # Create your views here.
 def user_login(request):
@@ -32,9 +32,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Успешная регистрация')
-            # Person.objects.create(name=form.cleaned_data['username'], email=form.cleaned_data['email'])
-            # Запуск задачи celery
-            # send_test_message.delay(form.cleaned_data['email'])
+            send_test_message.delay(form.cleaned_data['email'])
             return redirect('home')
         else:
             messages.error(request, 'Ошибка регистрации')
