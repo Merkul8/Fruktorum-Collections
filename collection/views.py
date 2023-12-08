@@ -130,5 +130,43 @@ def delete_bookmark(request, pk):
        return redirect('bookmarks')
    return render(request, 'collection/bookmarks_templates/delete_bookmark.html', {'bookmark': bookmark})
 
+# добавление закладки в коллекцию
 def add_bookmark_to_collection(request, pk):
-    return
+   collection = get_object_or_404(Collection, pk=pk)
+   if request.method == 'POST':
+       form = BookmarkAddToCollectionForm(request.POST)
+       if form.is_valid():
+           bookmark = form.cleaned_data['bookmark']
+           collection.bookmarks.add(bookmark)
+           messages.success(request, 'Добавление коллекции выполнено!')
+           return redirect('collections')
+       else:
+           messages.error(request, 'Ошибка.')
+   else:
+       form = BookmarkAddToCollectionForm()
+   return render(request, 'collection/collections_templates/add_bookmark_to_collection.html', {'form': form})
+
+
+def add_new_bookmark_to_collection(request, pk):
+    collection = get_object_or_404(Collection, pk=pk)
+    if request.method == 'POST':
+        form = BookmarkForm(request.POST)
+        if form.is_valid():
+            parametrs_for_bookmark = get_some_parameters(url=form.cleaned_data['url'])
+            bookmark = Bookmark.objects.create(
+                title=parametrs_for_bookmark.get('title', 'Не найдено'),
+                description=parametrs_for_bookmark.get('description', 'Не найдено'),
+                og_image=parametrs_for_bookmark.get('image', 'Не найдено'),
+                og_type=parametrs_for_bookmark.get('type', 'website'),
+                site_name=parametrs_for_bookmark.get('site_name', 'Не найдено'),
+                url=form.cleaned_data['url'],
+                user=request.user,
+                )
+            collection.bookmarks.add(bookmark)
+            messages.success(request, 'Добавление новой закладки в коллекцию выполнено!')
+            return redirect('collections')
+        else:
+            messages.error(request, 'Ошибка.')
+    else:
+        form = BookmarkForm()
+    return render(request, 'collection/collections_templates/add_new_bookmark_to_collection.html', {'form': form})

@@ -29,3 +29,7 @@ class BookmarkForm(forms.ModelForm):
     class Meta:
         model = Bookmark
         fields = ['url']
+
+
+class BookmarkAddToCollectionForm(forms.Form):
+   bookmark = forms.ModelChoiceField(queryset=Bookmark.objects.all())

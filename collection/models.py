@@ -10,7 +10,7 @@ class Collection(models.Model):
     date_created = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
     date_modified = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
     bookmarks = models.ManyToManyField('Bookmark')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
 
     def __str__(self) -> str:
         return self.title
