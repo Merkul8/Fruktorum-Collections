@@ -16,14 +16,16 @@ def is_og_property(tag):
 
 def get_some_parameters(url):
     """
-    Получение нужных отсортированных данный для заполнения
-    информации о закладке
+    Получение нужных отсортированных данных для заполнения
+    информации о закладке, значения парсятся с помощью библиотек
+    bs4 и requests
     """
     responce = requests.get(url)
     if responce.status_code == 200:
         soup = BeautifulSoup(responce.text, 'html.parser')
         try:
             res = soup.find_all(is_og_property)
+            # Сортировка данных для возвращения во view
             res = {meta_tag.get('property')[3:]: meta_tag.get('content') for meta_tag in res}
             if not res.get('description'):
                 description = soup.find('meta', attrs={'name': 'description'})

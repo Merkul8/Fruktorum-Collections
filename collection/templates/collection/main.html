@@ -3,6 +3,7 @@
 <div class="container py-5">
     <div class="row">
         <h3>!!!Чтобы использовать все функции сайта нужно зарегистрироваться!!!</h3>
+        {% if request.user.is_authenticated %}
         <a href="{% url 'collections' %}">
             <div class="card my-3">
                 <div class="card-body">
@@ -17,6 +18,7 @@
                 </div>
             </div>
         </a>
+        {% endif %}
     </div>
 </div>
 

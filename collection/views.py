@@ -7,7 +7,7 @@ from django.views.generic import DetailView
 from .services import get_some_parameters
 from collection.tasks import send_test_message
 
-# Create your views here.
+# Авторизация пользователя
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
@@ -44,9 +44,9 @@ def register(request):
 def main(request):
     return render(request, 'collection/main.html')
 
-# Collection 
+# Views для модели Collection 
 def get_collections(request):
-    all_collections = Collection.objects.all()
+    all_collections = Collection.objects.filter(user=request.user).order_by('-date_created')
     return render(request, 'collection/collections_templates/collections.html', context={'all_collections': all_collections})
 
 class CollectionDetailView(DetailView):
@@ -89,9 +89,9 @@ def update_collection(request, pk):
       form = CollectionForm(instance=collection)
   return render(request, 'collection/collections_templates/update_collection.html', {'form': form})
 
-# Bookmark
+# Views для модели Bookmark
 def get_bookmarks(request):
-    all_bookmarks = Bookmark.objects.all()
+    all_bookmarks = Bookmark.objects.filter(user=request.user).order_by('-date_created')
     return render(request, 'collection/bookmarks_templates/bookmarks.html', context={'all_bookmarks': all_bookmarks})
 
 class BookmarkDetailView(DetailView):
@@ -103,6 +103,7 @@ def bookmark_create(request):
     if request.method == 'POST':
         form = BookmarkForm(request.POST)
         if form.is_valid():
+            # Вызов функции для парсинга данных из модуля services.py
             parametrs_for_bookmark = get_some_parameters(url=form.cleaned_data['url'])
             Bookmark.objects.create(
                 title=parametrs_for_bookmark.get('title', 'Не найдено'),
@@ -132,7 +133,7 @@ def delete_bookmark(request, pk):
 def add_bookmark_to_collection(request, pk):
    collection = get_object_or_404(Collection, pk=pk)
    if request.method == 'POST':
-       form = BookmarkAddToCollectionForm(request.POST)
+       form = BookmarkAddToCollectionForm(request.POST, user=request.user)
        if form.is_valid():
            bookmark = form.cleaned_data['bookmark']
            collection.bookmarks.add(bookmark)
@@ -141,10 +142,10 @@ def add_bookmark_to_collection(request, pk):
        else:
            messages.error(request, 'Ошибка.')
    else:
-       form = BookmarkAddToCollectionForm()
+       form = BookmarkAddToCollectionForm(user=request.user)
    return render(request, 'collection/collections_templates/add_bookmark_to_collection.html', {'form': form})
 
-
+# Добавление новой закладки в коллекцию
 def add_new_bookmark_to_collection(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     if request.method == 'POST':

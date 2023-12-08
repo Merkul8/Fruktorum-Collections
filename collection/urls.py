@@ -2,6 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    # Главная страница
     path('', main, name='home'),
     # Регистрация, авторизация, выход из аккаунта
     path('register/', register, name='register'),

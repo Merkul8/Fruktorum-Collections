@@ -5,6 +5,9 @@ from django.urls import reverse
 
 
 class Collection(models.Model):
+    """ Модель коллекции, здесь используется отношения многие ко многим, поле bookmarks
+    а так же связь с моделью django - User, для того чтобы у каждого пользователя
+    были свои коллекции и закладки"""
     title = models.CharField(verbose_name='Название', max_length=255)
     description = models.CharField(verbose_name='Краткое описания', max_length=500)
     date_created = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
@@ -20,6 +23,7 @@ class Collection(models.Model):
 
 
 class Bookmark(models.Model):
+    """ Модель закладки, так же используется модель django - User """
     title = models.CharField(verbose_name='Название', max_length=255, default="Не найден")
     description = models.TextField(verbose_name='Краткое описания', max_length=3000, blank=True, default='Не найден')
     url = models.URLField(verbose_name='Ссылка')
